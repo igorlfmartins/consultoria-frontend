@@ -1,4 +1,4 @@
-const MAKE_WEBHOOK_URL = 'https://seu-webhook-do-make-aqui'
+const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/qpzrnwy6kl6f6xh15wd9kbnfya9dsxuh'
 
 export type SessionSummary = {
   id: string
@@ -74,4 +74,3 @@ export async function fetchSessions(userId: string): Promise<SessionSummary[]> {
     createdAt: s.createdAt ? String(s.createdAt) : undefined,
   }))
 }
-
