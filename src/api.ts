@@ -1,4 +1,5 @@
-const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/qpzrnwy6kl6f6xh15wd9kbnfya9dsxuh'
+const API_URL = import.meta.env.VITE_API_URL || '/api/consultoria'
+const CLIENT_API_KEY = import.meta.env.VITE_CLIENT_API_KEY || ''
 
 export type SessionSummary = {
   id: string
@@ -22,17 +23,24 @@ export async function sendConsultoriaMessage(params: {
   userId: string
   conversationId: string | null
   message: string
+  history?: ChatMessage[] // Adicionado histórico
 }): Promise<ChatResponse> {
-  const response = await fetch(MAKE_WEBHOOK_URL, {
+  // Converte histórico para o formato do Gemini (se necessário pelo backend)
+  // O backend espera { message, history: [{ role: 'user'|'model', parts: [{ text: '...' }] }] }
+  const formattedHistory = (params.history || []).map(msg => ({
+    role: msg.sender === 'user' ? 'user' : 'model',
+    parts: [{ text: msg.text }]
+  }));
+
+  const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'x-api-key': CLIENT_API_KEY,
     },
     body: JSON.stringify({
-      action: 'consultoria_chat',
-      userId: params.userId,
-      conversationId: params.conversationId,
       message: params.message,
+      history: formattedHistory,
     }),
   })
 
@@ -40,59 +48,16 @@ export async function sendConsultoriaMessage(params: {
     throw new Error('Falha ao comunicar com o serviço de consultoria')
   }
 
-  const contentType = response.headers.get('content-type') ?? ''
-  let data: any = null
-  let textFallback: string | null = null
-
-  if (contentType.includes('application/json')) {
-    try {
-      data = await response.json()
-    } catch {
-      textFallback = await response.text()
-    }
-  } else {
-    textFallback = await response.text()
-  }
-
-  if (!data) {
-    const replyText =
-      (textFallback ?? '').trim() || 'O consultor recebeu sua mensagem e está processando a resposta.'
-
-    return {
-      conversationId: params.conversationId ?? crypto.randomUUID(),
-      reply: replyText,
-    }
-  }
+  const data = await response.json()
 
   return {
-    conversationId: data.conversationId ?? params.conversationId ?? crypto.randomUUID(),
-    reply: data.reply ?? String(data.message ?? textFallback ?? ''),
+    conversationId: params.conversationId ?? crypto.randomUUID(),
+    reply: data.reply || 'Sem resposta do consultor.',
   }
 }
 
-export async function fetchSessions(userId: string): Promise<SessionSummary[]> {
-  const response = await fetch(MAKE_WEBHOOK_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      action: 'consultoria_list_sessions',
-      userId,
-    }),
-  })
-
-  if (!response.ok) {
-    throw new Error('Falha ao carregar sessões')
-  }
-
-  const data = await response.json()
-
-  const rawSessions = Array.isArray(data.sessions) ? (data.sessions as Array<{ id?: unknown; title?: unknown; createdAt?: unknown }>) : []
-
-  return rawSessions.map((session, index) => ({
-    id: String(session.id ?? index),
-    title: String(session.title ?? `Sessão ${index + 1}`),
-    createdAt: session.createdAt ? String(session.createdAt) : undefined,
-  }))
+export async function fetchSessions(_userId: string): Promise<SessionSummary[]> {
+  // Como removemos o banco de dados do Make, por enquanto retornamos vazio
+  // Futuramente, isso pode ser conectado a um Supabase/Postgres
+  return []
 }

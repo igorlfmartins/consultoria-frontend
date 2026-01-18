@@ -87,7 +87,6 @@ export function Chat() {
         userId,
         conversationId: currentSession.id,
         message: text,
-        history: currentSession.messages,
       })
 
       const aiMessage: ChatMessage = {
