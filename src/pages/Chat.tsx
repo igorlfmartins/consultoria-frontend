@@ -420,7 +420,7 @@ export function Chat() {
               </div>
               <p className="text-[10px] text-slate-500">
                 As respostas são geradas por modelos de IA e devem ser usadas como insumo para discussão, não como
-                recomendação definitiva.
+                recomendação definitiva. Não compartilhe informações confidenciais sem autorização.
               </p>
             </form>
           </div>
