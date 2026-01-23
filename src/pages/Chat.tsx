@@ -1,6 +1,6 @@
 import type { FormEvent, KeyboardEvent } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Hash, Loader2, LogOut, MessageSquareMore, Plus, Send, Trash2, Target, ArrowRight, FileText } from 'lucide-react'
+import { Hash, Loader2, LogOut, MessageSquareMore, Plus, Send, Trash2, Target, ArrowRight, FileText, Settings, X, CreditCard, Moon, Sun, Globe, Zap } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import { useAuth } from '../auth'
 import type { ChatMessage, SessionSummary } from '../api'
@@ -86,8 +86,43 @@ export function Chat() {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingSessions, setIsLoadingSessions] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // Settings State
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [language, setLanguage] = useState('en')
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+  const [toneLevel, setToneLevel] = useState(3)
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
+
+  // Load settings
+  useEffect(() => {
+    const savedLang = localStorage.getItem('consultoria_language') || 'en'
+    const savedTheme = (localStorage.getItem('consultoria_theme') as 'light' | 'dark') || 'dark'
+    const savedTone = parseInt(localStorage.getItem('consultoria_tone') || '3', 10)
+    setLanguage(savedLang)
+    setTheme(savedTheme)
+    setToneLevel(savedTone)
+  }, [])
+
+  // Apply theme
+  useEffect(() => {
+    const root = window.document.documentElement
+    root.classList.remove('light', 'dark')
+    root.classList.add(theme)
+    localStorage.setItem('consultoria_theme', theme)
+  }, [theme])
+
+  // Save language
+  useEffect(() => {
+    localStorage.setItem('consultoria_language', language)
+  }, [language])
+
+  // Save tone
+  useEffect(() => {
+    localStorage.setItem('consultoria_tone', toneLevel.toString())
+  }, [toneLevel])
 
   useEffect(() => {
     if (!userId) return
@@ -185,6 +220,8 @@ export function Chat() {
         message: text,
         history: currentSession.messages,
         focus: focusToSend,
+        language: language,
+        toneLevel: toneLevel,
       })
 
       const aiMessage: ChatMessage = {
@@ -361,26 +398,38 @@ export function Chat() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0">
-        <header className="border-b border-slate-800 bg-slate-950/90 backdrop-blur flex items-center justify-between px-4 md:px-6 py-3">
+      <main className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+        <header className="border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur flex items-center justify-between px-4 md:px-6 py-3 transition-colors duration-300">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-sky-600/90 flex items-center justify-center text-slate-50">
+            <div className="h-9 w-9 rounded-lg bg-sky-600/90 flex items-center justify-center text-white">
               <MessageSquareMore className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-sm md:text-base font-semibold text-slate-50">Consultoria Estratégica</h1>
-              <p className="text-[11px] text-slate-400">
+              <h1 className="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-50">Consultoria Estratégica</h1>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Mentoria de negócios em tempo real, orientada por dados e benchmarks de mercado.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-[11px] text-slate-400">
-            <span className="hidden sm:inline-flex flex-col text-right">
-              <span>Consultor IA Ativo</span>
-              <span className="text-sky-400">Linha Estratégica</span>
-            </span>
-            <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.3)]" />
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400">
+              <span className="flex flex-col text-right">
+                <span>Consultor IA Ativo</span>
+                <span className="text-sky-600 dark:text-sky-400 font-medium">Linha Estratégica</span>
+              </span>
+              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.2)]" />
+            </div>
+            
+            <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
+
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="p-2 rounded-md text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
+              title="Configurações"
+            >
+              <Settings className="h-5 w-5" />
+            </button>
           </div>
         </header>
 
@@ -534,6 +583,129 @@ export function Chat() {
             </form>
           </div>
         </section>
+
+        {isSettingsOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-sky-500" />
+                  Configurações
+                </h2>
+                <button onClick={() => setIsSettingsOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                {/* Language */}
+                <div className="space-y-3">
+                  <label className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    Idioma do Consultor
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { code: 'en', label: 'English' },
+                      { code: 'pt', label: 'Português' },
+                      { code: 'es', label: 'Español' }
+                    ].map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => setLanguage(lang.code)}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                          language === lang.code
+                            ? 'bg-sky-50 dark:bg-sky-500/10 border-sky-200 dark:border-sky-500/50 text-sky-700 dark:text-sky-400'
+                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600'
+                        }`}
+                      >
+                        {lang.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tone Level */}
+                <div className="space-y-3">
+                  <label className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                    <Zap className="h-4 w-4" />
+                    Nível de Franqueza
+                  </label>
+                  <div className="grid grid-cols-1 gap-2">
+                    {[
+                      { level: 1, label: 'Honesto Compassivo', desc: 'Coaching e feedback construtivo.' },
+                      { level: 2, label: 'Socrático Cooperativo', desc: 'Investigação conjunta e lógica.' },
+                      { level: 3, label: 'Honesto Brutal', desc: 'Verdade crua e corte de autoengano.' }
+                    ].map((tone) => (
+                      <button
+                        key={tone.level}
+                        onClick={() => setToneLevel(tone.level)}
+                        className={`flex flex-col items-start px-3 py-2 rounded-lg text-sm border transition-all ${
+                          toneLevel === tone.level
+                            ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/50 text-emerald-800 dark:text-emerald-400'
+                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600'
+                        }`}
+                      >
+                        <span className="font-medium">{tone.label}</span>
+                        <span className="text-[10px] opacity-80 text-left">{tone.desc}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Theme */}
+                <div className="space-y-3">
+                  <label className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                    {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                    Aparência
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setTheme('light')}
+                      className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                        theme === 'light'
+                           ? 'bg-sky-50 border-sky-200 text-sky-700'
+                           : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                      }`}
+                    >
+                      <Sun className="h-4 w-4" />
+                      Light Mode
+                    </button>
+                    <button
+                      onClick={() => setTheme('dark')}
+                      className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                        theme === 'dark'
+                           ? 'bg-slate-800 border-slate-600 text-sky-400'
+                           : 'bg-white border-slate-200 text-slate-600'
+                      }`}
+                    >
+                      <Moon className="h-4 w-4" />
+                      Dark Mode
+                    </button>
+                  </div>
+                </div>
+
+                {/* Subscription */}
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
+                  <div className="bg-slate-50 dark:bg-slate-950/50 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-slate-900 dark:text-white">Plano Pro</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Acesso ilimitado ao consultor</p>
+                    </div>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-xs font-bold hover:opacity-90 transition-opacity">
+                      <CreditCard className="h-3 w-3" />
+                      Manage Subscription
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-slate-50 dark:bg-slate-950/50 text-center text-[10px] text-slate-400 border-t border-slate-200 dark:border-slate-800">
+                Consultoria de Negócios AI v1.2.0
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   )

@@ -25,6 +25,8 @@ export async function sendConsultoriaMessage(params: {
   message: string
   history?: ChatMessage[]
   focus?: string | null
+  language?: string
+  toneLevel?: number
 }): Promise<ChatResponse> {
   // Converte histórico para o formato do Gemini (se necessário pelo backend)
   // O backend espera { message, history: [{ role: 'user'|'model', parts: [{ text: '...' }] }] }
@@ -43,6 +45,8 @@ export async function sendConsultoriaMessage(params: {
       message: params.message,
       history: formattedHistory,
       focus: params.focus,
+      language: params.language,
+      toneLevel: params.toneLevel,
     }),
   })
 
