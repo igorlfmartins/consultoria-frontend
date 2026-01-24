@@ -56,9 +56,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function signUp(email: string, password: string) {
+    const redirectTo = window.location.origin
     return supabase.auth.signUp({
       email: email.trim(),
-      password: password
+      password: password,
+      options: {
+        emailRedirectTo: redirectTo,
+      }
     })
   }
 
