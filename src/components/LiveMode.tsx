@@ -109,6 +109,16 @@ export function LiveMode({ onClose, systemInstruction }: LiveModeProps) {
 
   useEffect(() => {
     const getWebSocketUrl = () => {
+      // 1. Prioritize Runtime Env (set by Docker/Railway at runtime)
+      // @ts-ignore
+      if (window.ENV?.VITE_API_URL) {
+         // @ts-ignore
+         const url = new URL(window.ENV.VITE_API_URL);
+         const protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+         return `${protocol}//${url.host}/api/live`;
+      }
+
+      // 2. Build Time Env
       const apiUrl = import.meta.env.VITE_API_URL;
       
       if (apiUrl) {
@@ -126,11 +136,13 @@ export function LiveMode({ onClose, systemInstruction }: LiveModeProps) {
         }
       }
       
+      // 3. Fallback to current window host
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const host = window.location.host;
       return `${protocol}//${host}/api/live`;
     };
 
+    console.log("Connecting to WS URL:", getWebSocketUrl());
     const ws = new WebSocket(getWebSocketUrl());
     wsRef.current = ws;
     setConnectionStatus("Conectando ao Socket...");
