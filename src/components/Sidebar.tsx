@@ -30,10 +30,6 @@ export function Sidebar({
   return (
     <aside className={`hidden md:flex flex-col border-r-4 border-bio-deep bg-bio-deep text-bio-white transition-all duration-300 ease-in-out ${isCollapsed ? 'md:w-20' : 'md:w-80'}`}>
       <div className={`bg-bio-deep relative overflow-hidden group flex flex-col ${isCollapsed ? 'p-4 items-center' : 'p-8'}`}>
-        <div className={`absolute top-0 right-0 p-4 transition-opacity ${isCollapsed ? 'opacity-0' : 'opacity-10 group-hover:opacity-20'}`}>
-           <div className="w-16 h-16 border-4 border-bio-lime rounded-full" />
-        </div>
-        
         <div className="relative z-10 flex justify-between items-start w-full">
           {!isCollapsed && (
             <p className="text-[10px] font-bold uppercase tracking-widest text-bio-lime mb-2 font-mono whitespace-nowrap overflow-hidden">{t('chat.sidebar.header')}</p>
