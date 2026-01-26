@@ -34,7 +34,6 @@ export function Sidebar({
         
         <div className="relative z-10">
           <p className="text-[10px] font-bold uppercase tracking-widest text-bio-lime mb-2 font-mono">{t('chat.sidebar.header')}</p>
-          <h2 className="text-3xl font-bold text-white tracking-tighter font-mono leading-none">{t('chat.sidebar.subHeader')}</h2>
         </div>
 
         <button
