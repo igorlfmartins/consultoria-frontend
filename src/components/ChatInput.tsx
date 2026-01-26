@@ -37,8 +37,8 @@ export function ChatInput({ input, setInput, onSubmit, onGenerateReport, onToggl
 
   return (
     <form onSubmit={onSubmit} className="w-full space-y-4">
-      <div className="flex flex-col md:flex-row items-stretch md:items-end gap-4">
-        <div className="flex-1 bg-bio-deep/5 dark:bg-bio-deep border-2 border-bio-deep/10 dark:border-bio-white/20 p-4 relative group focus-within:border-bio-teal dark:focus-within:border-bio-lime transition-colors">
+      <div className="flex flex-col md:flex-row items-stretch gap-4">
+        <div className="flex-1 bg-bio-deep/5 dark:bg-bio-deep border-2 border-bio-deep/10 dark:border-bio-white/20 p-4 relative group focus-within:border-bio-teal dark:focus-within:border-bio-lime transition-colors flex items-center">
           <div className="absolute top-0 left-0 w-1 h-4 bg-bio-teal dark:bg-bio-lime opacity-30" />
           <textarea
             id="chat-input"
@@ -54,7 +54,7 @@ export function ChatInput({ input, setInput, onSubmit, onGenerateReport, onToggl
           />
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-stretch gap-3">
           <button
             type="submit"
             disabled={!canSend}
@@ -67,7 +67,7 @@ export function ChatInput({ input, setInput, onSubmit, onGenerateReport, onToggl
           <button
             type="button"
             onClick={onToggleLive}
-            className="p-4 bg-bio-white border-2 border-bio-deep/10 text-bio-deep hover:border-bio-lime hover:bg-bio-lime/10 transition-all relative group"
+            className="h-full px-4 bg-bio-white border-2 border-bio-deep/10 text-bio-deep hover:border-bio-lime hover:bg-bio-lime/10 transition-all relative group flex items-center justify-center"
             title="Live Mode"
           >
             <div className="absolute top-0 right-0 w-2 h-2 bg-bio-lime animate-pulse" />
@@ -77,7 +77,7 @@ export function ChatInput({ input, setInput, onSubmit, onGenerateReport, onToggl
           <button
             type="button"
             onClick={onGenerateReport}
-            className="p-4 bg-bio-white border-2 border-bio-deep/10 text-bio-deep/60 hover:text-bio-purple hover:border-bio-purple hover:bg-bio-purple/10 transition-all"
+            className="h-full px-4 bg-bio-white border-2 border-bio-deep/10 text-bio-deep/60 hover:text-bio-purple hover:border-bio-purple hover:bg-bio-purple/10 transition-all flex items-center justify-center"
             title={t('chat.footer.generateReportTooltip')}
           >
             <FileText className="h-4 w-4" />
