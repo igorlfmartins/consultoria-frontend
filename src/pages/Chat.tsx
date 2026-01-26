@@ -341,116 +341,120 @@ export function Chat() {
           <section className="flex-1 flex flex-col min-h-0 relative">
             <div className="absolute inset-0 bg-cross-pattern opacity-5 pointer-events-none" />
             
-            <div className="flex-1 overflow-y-auto px-4 md:px-12 py-8 space-y-8 scroll-smooth">
-              {currentSession.messages.length === 0 && !isLoading && (
-                <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 mt-8">
-                  <div className="md:col-span-8 bg-bio-deep p-8 md:p-12 flex flex-col justify-between min-h-[300px] relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Target className="h-32 w-32 text-bio-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-bio-lime uppercase tracking-widest mb-4 font-mono">{t('chat.body.initialBriefing.title')}</p>
-                      <h2 className="text-3xl md:text-4xl font-bold text-bio-white font-mono leading-tight">
-                        {t('chat.body.initialBriefing.heading')}
-                      </h2>
-                    </div>
-                    <div className="mt-8 pt-8 border-t border-bio-white/10">
-                      <p className="text-bio-white/60 text-sm font-mono">
-                        Selecione um módulo operacional ao lado ou inicie uma nova query.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-4 grid grid-rows-3 gap-4">
-                    <div className="bg-bio-purple p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
-                      <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example1')}</p>
-                    </div>
-                    <div className="bg-bio-teal p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
-                      <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example2')}</p>
-                    </div>
-                    <div className="bg-bio-lime p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
-                      <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example3')}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {currentSession.messages.map((message) => {
-                const isUser = message.sender === 'user'
-                return (
-                  <div key={message.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                    <div
-                      className={`max-w-3xl p-6 md:p-8 text-base font-medium relative ${
-                        isUser
-                          ? 'bg-bio-deep text-bio-white ml-12'
-                          : 'bg-bio-white border-2 border-bio-deep text-bio-deep mr-12'
-                      }`}
-                    >
-                      <div className="absolute -top-3 left-6 px-2 bg-inherit">
-                        <span className={`text-[10px] font-bold uppercase tracking-widest font-mono ${isUser ? 'text-bio-lime' : 'text-bio-deep'}`}>
-                          {isUser ? 'USER_INPUT' : 'SYSTEM_RESPONSE'}
-                        </span>
+            <div className="flex-1 overflow-y-auto py-8 scroll-smooth">
+              <div className="max-w-5xl mx-auto w-full px-6 md:px-8 space-y-8">
+                {currentSession.messages.length === 0 && !isLoading && (
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-8">
+                    <div className="md:col-span-8 bg-bio-deep p-8 md:p-12 flex flex-col justify-between min-h-[300px] relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <Target className="h-32 w-32 text-bio-white" />
                       </div>
-                      
-                      <ReactMarkdown className={`prose max-w-none ${isUser ? 'prose-invert' : 'prose-headings:font-mono prose-headings:uppercase'}`}>
-                        {message.text}
-                      </ReactMarkdown>
+                      <div>
+                        <p className="text-xs font-bold text-bio-lime uppercase tracking-widest mb-4 font-mono">{t('chat.body.initialBriefing.title')}</p>
+                        <h2 className="text-3xl md:text-4xl font-bold text-bio-white font-mono leading-tight">
+                          {t('chat.body.initialBriefing.heading')}
+                        </h2>
+                      </div>
+                      <div className="mt-8 pt-8 border-t border-bio-white/10">
+                        <p className="text-bio-white/60 text-sm font-mono">
+                          Selecione um módulo operacional ao lado ou inicie uma nova query.
+                        </p>
+                      </div>
+                    </div>
 
-                      {!isUser && (
-                        <div className="mt-6 pt-4 border-t-2 border-bio-deep/10 flex flex-wrap gap-2">
-                          {focusAreas.map((area) => (
-                            <button
-                              key={area.id}
-                              onClick={() => handleDeepDive(area)}
-                              className="px-3 py-1 bg-bio-purple/10 hover:bg-bio-purple text-bio-deep text-[10px] font-bold uppercase tracking-widest transition-colors font-mono"
-                            >
-                              {area.label}
-                            </button>
-                          ))}
-                        </div>
-                      )}
+                    <div className="md:col-span-4 grid grid-rows-3 gap-4">
+                      <div className="bg-bio-purple p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
+                        <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example1')}</p>
+                      </div>
+                      <div className="bg-bio-teal p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
+                        <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example2')}</p>
+                      </div>
+                      <div className="bg-bio-lime p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
+                        <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example3')}</p>
+                      </div>
                     </div>
                   </div>
-                )
-              })}
-              
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-bio-lime p-4 flex items-center gap-3">
-                    <Loader2 className="h-5 w-5 animate-spin text-bio-deep" />
-                    <span className="text-xs font-bold uppercase tracking-widest text-bio-deep font-mono">Processing Data Stream...</span>
+                )}
+
+                {currentSession.messages.map((message) => {
+                  const isUser = message.sender === 'user'
+                  return (
+                    <div key={message.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+                      <div
+                        className={`max-w-3xl p-6 md:p-8 text-base font-medium relative ${
+                          isUser
+                            ? 'bg-bio-deep text-bio-white ml-12'
+                            : 'bg-bio-white border-2 border-bio-deep text-bio-deep mr-12'
+                        }`}
+                      >
+                        <div className="absolute -top-3 left-6 px-2 bg-inherit">
+                          <span className={`text-[10px] font-bold uppercase tracking-widest font-mono ${isUser ? 'text-bio-lime' : 'text-bio-deep'}`}>
+                            {isUser ? 'USER_INPUT' : 'SYSTEM_RESPONSE'}
+                          </span>
+                        </div>
+                        
+                        <ReactMarkdown className={`prose max-w-none ${isUser ? 'prose-invert' : 'prose-headings:font-mono prose-headings:uppercase'}`}>
+                          {message.text}
+                        </ReactMarkdown>
+
+                        {!isUser && (
+                          <div className="mt-6 pt-4 border-t-2 border-bio-deep/10 flex flex-wrap gap-2">
+                            {focusAreas.map((area) => (
+                              <button
+                                key={area.id}
+                                onClick={() => handleDeepDive(area)}
+                                className="px-3 py-1 bg-bio-purple/10 hover:bg-bio-purple text-bio-deep text-[10px] font-bold uppercase tracking-widest transition-colors font-mono"
+                              >
+                                {area.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+                
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-bio-lime p-4 flex items-center gap-3">
+                      <Loader2 className="h-5 w-5 animate-spin text-bio-deep" />
+                      <span className="text-xs font-bold uppercase tracking-widest text-bio-deep font-mono">Processing Data Stream...</span>
+                    </div>
                   </div>
-                </div>
-              )}
-              {error && <p className="text-xs text-red-500 font-mono mt-4">{error}</p>}
-              <div ref={messagesEndRef} />
+                )}
+                {error && <p className="text-xs text-red-500 font-mono mt-4">{error}</p>}
+                <div ref={messagesEndRef} />
+              </div>
             </div>
 
-            <div className="p-4 bg-bio-white border-t border-bio-deep/10 dark:bg-bio-deep dark:border-bio-white/10">
-              <div className="max-w-4xl mx-auto mb-4 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                {focusAreas.map((area) => (
-                  <button
-                    key={area.id}
-                    onClick={() => setSelectedFocus(selectedFocus === area.label ? null : area.label)}
-                    className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest font-mono border transition-all whitespace-nowrap ${
-                      selectedFocus === area.label
-                        ? 'bg-bio-teal text-bio-deep border-bio-teal'
-                        : 'bg-transparent border-bio-deep/20 text-bio-deep/60 hover:border-bio-deep/50 hover:text-bio-deep dark:text-bio-white/60 dark:border-bio-white/20 dark:hover:border-bio-white/50 dark:hover:text-bio-white'
-                    }`}
-                  >
-                    {area.label}
-                  </button>
-                ))}
-              </div>
+            <div className="bg-bio-white border-t border-bio-deep/10 dark:bg-bio-deep dark:border-bio-white/10">
+              <div className="max-w-5xl mx-auto w-full px-6 md:px-8 py-4">
+                <div className="mb-4 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                  {focusAreas.map((area) => (
+                    <button
+                      key={area.id}
+                      onClick={() => setSelectedFocus(selectedFocus === area.label ? null : area.label)}
+                      className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest font-mono border transition-all whitespace-nowrap ${
+                        selectedFocus === area.label
+                          ? 'bg-bio-teal text-bio-deep border-bio-teal'
+                          : 'bg-transparent border-bio-deep/20 text-bio-deep/60 hover:border-bio-deep/50 hover:text-bio-deep dark:text-bio-white/60 dark:border-bio-white/20 dark:hover:border-bio-white/50 dark:hover:text-bio-white'
+                      }`}
+                    >
+                      {area.label}
+                    </button>
+                  ))}
+                </div>
 
-              <ChatInput
-                input={input}
-                setInput={setInput}
-                isLoading={isLoading}
-                onSubmit={handleSubmit}
-                onToggleLive={() => setIsLiveMode(true)}
-                onGenerateReport={handleGenerateReport}
-              />
+                <ChatInput
+                  input={input}
+                  setInput={setInput}
+                  isLoading={isLoading}
+                  onSubmit={handleSubmit}
+                  onToggleLive={() => setIsLiveMode(true)}
+                  onGenerateReport={handleGenerateReport}
+                />
+              </div>
             </div>
           </section>
 
