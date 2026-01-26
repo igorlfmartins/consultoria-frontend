@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { X, Mic, MicOff } from 'lucide-react';
 import { LiveVisualizer } from './LiveVisualizer';
 
+// @ts-ignore
+import pcmProcessorUrl from '../audio-processor.js?url';
+
 interface LiveModeProps {
   onClose: () => void;
   systemInstruction: string;
@@ -17,7 +20,7 @@ export function LiveMode({ onClose, systemInstruction }: LiveModeProps) {
   
   const wsRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
-  const processorRef = useRef<ScriptProcessorNode | null>(null);
+  const workletNodeRef = useRef<AudioWorkletNode | null>(null);
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const audioQueue = useRef<Int16Array[]>([]);
@@ -40,16 +43,18 @@ export function LiveMode({ onClose, systemInstruction }: LiveModeProps) {
           audioContextRef.current = new AudioContext({ sampleRate: 16000 });
         }
 
-        sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
-        processorRef.current = audioContextRef.current.createScriptProcessor(4096, 1, 1);
-        
-        sourceRef.current.connect(processorRef.current);
-        processorRef.current.connect(audioContextRef.current.destination);
+        try {
+          await audioContextRef.current.audioWorklet.addModule(pcmProcessorUrl);
+        } catch (e) {
+          console.error("Failed to load audio worklet", e);
+        }
 
-        processorRef.current.onaudioprocess = (e) => {
+        sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
+        workletNodeRef.current = new AudioWorkletNode(audioContextRef.current, 'pcm-processor');
+        
+        workletNodeRef.current.port.onmessage = (event) => {
           if (!mounted) return;
-          
-          const inputData = e.inputBuffer.getChannelData(0);
+          const inputData = event.data;
           
           // Calculate volume for visualizer
           let sum = 0;
@@ -78,6 +83,9 @@ export function LiveMode({ onClose, systemInstruction }: LiveModeProps) {
           }));
         };
 
+        sourceRef.current.connect(workletNodeRef.current);
+        workletNodeRef.current.connect(audioContextRef.current.destination);
+
       } catch (err: any) {
         console.error('Error accessing microphone:', err);
         if (mounted) setConnectionError("Permissão de microfone negada");
@@ -92,7 +100,7 @@ export function LiveMode({ onClose, systemInstruction }: LiveModeProps) {
         streamRef.current.getTracks().forEach(track => track.stop());
       }
       sourceRef.current?.disconnect();
-      processorRef.current?.disconnect();
+      workletNodeRef.current?.disconnect();
     };
   }, [isMuted]); // Re-bind if muted changes (though logical check is inside callback, this is fine)
 
