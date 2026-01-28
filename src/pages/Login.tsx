@@ -70,16 +70,6 @@ export function Login() {
         
         {/* Left Block: Hero / Branding */}
         <div className="bg-bio-purple relative flex flex-col justify-between p-8 lg:p-16 overflow-hidden group">
-           <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity duration-700">
-             <div className="grid grid-cols-3 gap-4">
-                {[...Array(9)].map((_, i) => (
-                  <div key={i} className="w-12 h-12 border-2 border-bio-deep rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-bio-deep rounded-full" />
-                  </div>
-                ))}
-             </div>
-           </div>
-           
            <div className="z-10">
              <div className="flex items-center gap-3 mb-8">
                <div className="w-4 h-4 bg-bio-lime" />

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Loader2, MessageSquareMore, Target, Settings, PanelLeftOpen } from 'lucide-react'
+import { Loader2, MessageSquareMore, Settings, PanelLeftOpen } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import { useTranslation } from 'react-i18next'
 
@@ -135,31 +135,16 @@ export function Chat() {
                 {currentSession.messages.length === 0 && !isLoading && (
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-8">
                     <div className="md:col-span-8 bg-bio-deep p-8 md:p-12 flex flex-col justify-between min-h-[300px] relative overflow-hidden group">
-                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Target className="h-32 w-32 text-bio-white" />
-                      </div>
                       <div>
                         <p className="text-xs font-bold text-bio-lime uppercase tracking-widest mb-4 font-mono">{t('chat.body.initialBriefing.title')}</p>
-                        <h2 className="text-3xl md:text-4xl font-bold text-bio-white font-mono leading-tight">
+                        <h2 className="text-3xl md:text-4xl font-bold text-bio-deep dark:text-bio-white font-mono leading-tight">
                           {t('chat.body.initialBriefing.heading')}
                         </h2>
                       </div>
                       <div className="mt-8 pt-8 border-t border-bio-white/10">
-                        <p className="text-bio-white/60 text-sm font-mono">
+                        <p className="text-bio-deep/70 dark:text-bio-white/60 text-sm font-mono">
                           Selecione um módulo operacional ao lado ou inicie uma nova query.
                         </p>
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-4 grid grid-rows-3 gap-4">
-                      <div className="bg-bio-purple p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
-                        <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example1')}</p>
-                      </div>
-                      <div className="bg-bio-teal p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
-                        <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example2')}</p>
-                      </div>
-                      <div className="bg-bio-lime p-6 flex flex-col justify-center hover:brightness-110 cursor-pointer transition-all">
-                        <p className="text-bio-deep text-sm font-bold font-mono leading-tight">{t('chat.body.initialBriefing.example3')}</p>
                       </div>
                     </div>
                   </div>
