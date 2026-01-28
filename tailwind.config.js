@@ -13,7 +13,7 @@ export default {
       },
       colors: {
         bio: {
-          deep: '#032F24',   // Deep Forest Green (Background Principal)
+          deep: '#05100dff',   // Deep Forest Green (Background Principal)
           purple: '#7B8DFF', // Digital Lavender (Destaque Secundário)
           teal: '#00D68F',   // Vibrant Teal (Ações / Blocos Informativos)
           lime: '#D4FF33',   // Acid Lime (Highlights / Ícones)

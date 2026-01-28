@@ -12,6 +12,8 @@ interface SidebarProps {
   onDeleteSession: (sessionId: string, e: React.MouseEvent) => void
   userId: string | null
   onSignOut: () => void
+  isMobileOpen: boolean
+  onCloseMobile: () => void
 }
 
 export function Sidebar({
@@ -23,13 +25,15 @@ export function Sidebar({
   onDeleteSession,
   userId,
   onSignOut,
+  isMobileOpen,
+  onCloseMobile,
 }: SidebarProps) {
   const { t, i18n } = useTranslation()
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
-    <aside className={`hidden md:flex flex-col border-r-4 border-bio-teal bg-bio-white dark:bg-bio-deep text-bio-deep dark:text-bio-white transition-all duration-300 ease-in-out ${isCollapsed ? 'md:w-20' : 'md:w-80'}`}>
-      <div className={`bg-bio-white dark:bg-bio-deep relative overflow-hidden group flex flex-col ${isCollapsed ? 'p-4 items-center' : 'p-8'}`}>
+    <aside className={`fixed md:static inset-y-0 left-0 z-40 flex flex-col border-r-4 border-bio-teal bg-bio-white dark:bg-bio-deep text-bio-deep dark:text-bio-white transition-transform duration-300 ease-in-out ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 w-72 ${isCollapsed ? 'md:w-20' : 'md:w-80'}`}>
+      <div className={`bg-bio-white dark:bg-bio-deep relative overflow-hidden group flex flex-col ${isCollapsed ? 'p-4 items-center' : 'p-6 md:p-8'}`}>
         <div className="relative z-10 flex justify-between items-start w-full">
           {!isCollapsed && (
             <div className="text-[10px] font-bold uppercase tracking-widest text-bio-lime mb-2 font-mono flex flex-col items-start gap-1">
@@ -38,13 +42,24 @@ export function Sidebar({
               <span>Multi-Agente</span>
             </div>
           )}
-          <button 
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className={`text-bio-lime hover:text-bio-white transition-colors ${isCollapsed ? 'mx-auto' : ''}`}
-            title={isCollapsed ? "Expandir" : "Recolher"}
-          >
-            {isCollapsed ? <PanelLeftOpen className="h-6 w-6" /> : <PanelLeftClose className="h-5 w-5" />}
-          </button>
+          <div className={`flex items-center gap-2 ${isCollapsed ? 'mx-auto' : ''}`}>
+            <button
+              type="button"
+              onClick={onCloseMobile}
+              className="md:hidden text-bio-lime hover:text-bio-white transition-colors"
+              title="Fechar"
+            >
+              <PanelLeftClose className="h-6 w-6" />
+            </button>
+            <button 
+              type="button"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="hidden md:inline-flex text-bio-lime hover:text-bio-white transition-colors"
+              title={isCollapsed ? "Expandir" : "Recolher"}
+            >
+              {isCollapsed ? <PanelLeftOpen className="h-6 w-6" /> : <PanelLeftClose className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         <button

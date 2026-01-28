@@ -4,11 +4,17 @@
 
 @layer base {
   :root {
+    color-scheme: light;
+  }
+  .dark {
     color-scheme: dark;
   }
 
   body {
-    @apply bg-bio-deep text-bio-white font-sans antialiased tracking-wide leading-relaxed-geo;
+    @apply bg-bio-white text-bio-deep font-sans antialiased tracking-wide leading-relaxed-geo;
+  }
+  .dark body {
+    @apply bg-bio-deep text-bio-white;
   }
 
   h1, h2, h3, h4, h5, h6 {

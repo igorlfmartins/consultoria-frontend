@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Loader2, MessageSquareMore, Target, Settings } from 'lucide-react'
+import { Loader2, MessageSquareMore, Target, Settings, PanelLeftOpen } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import { useTranslation } from 'react-i18next'
 
@@ -38,6 +38,7 @@ export function Chat() {
   const [selectedFocus, setSelectedFocus] = useState<string | null>(null)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isLiveMode, setIsLiveMode] = useState(false)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [input, setInput] = useState('')
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
@@ -66,8 +67,8 @@ export function Chat() {
   }
 
   return (
-    <div className="h-screen bg-bio-deep text-bio-deep flex font-sans overflow-hidden">
-      <div className="flex-1 flex max-w-[1920px] mx-auto w-full border-x border-bio-deep/10 bg-bio-white">
+    <div className="h-screen bg-bio-white text-bio-deep dark:bg-bio-deep dark:text-bio-white flex font-sans overflow-hidden">
+      <div className="flex-1 flex max-w-[1920px] mx-auto w-full border-x border-bio-deep/10 dark:border-bio-white/10 bg-bio-white dark:bg-bio-deep relative">
         <Sidebar
           sessions={sessions}
           currentSessionId={currentSession.id}
@@ -77,17 +78,34 @@ export function Chat() {
           onDeleteSession={handleDeleteSession}
           userId={user?.id || ''}
           onSignOut={signOut}
+          isMobileOpen={isMobileSidebarOpen}
+          onCloseMobile={() => setIsMobileSidebarOpen(false)}
         />
+        {isMobileSidebarOpen && (
+          <button
+            type="button"
+            onClick={() => setIsMobileSidebarOpen(false)}
+            className="fixed inset-0 z-30 bg-bio-deep/40 dark:bg-bio-white/10 md:hidden"
+            aria-label="Fechar menu"
+          />
+        )}
 
         <main className="flex-1 flex flex-col min-w-0 bg-bio-white dark:bg-bio-deep relative">
-          {/* Header Block */}
-          <header className="h-20 bg-bio-teal flex items-center justify-between px-8 border-b-4 border-bio-deep">
+          <header className="h-16 sm:h-20 bg-bio-teal flex items-center justify-between px-4 sm:px-6 md:px-8 border-b-4 border-bio-deep dark:border-bio-white/10">
             <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setIsMobileSidebarOpen(true)}
+                className="md:hidden p-2 bg-bio-deep text-bio-teal hover:bg-bio-purple hover:text-bio-deep transition-colors"
+                aria-label="Abrir menu"
+              >
+                <PanelLeftOpen className="h-4 w-4" />
+              </button>
               <div className="w-10 h-10 bg-bio-deep flex items-center justify-center">
                 <MessageSquareMore className="h-5 w-5 text-bio-teal" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-bio-deep tracking-tight font-mono leading-none uppercase">{t('chat.header.title')}</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-bio-deep tracking-tight font-mono leading-none uppercase">{t('chat.header.title')}</h1>
                 <p className="text-[10px] font-bold text-bio-deep/60 uppercase tracking-widest font-mono">System Active</p>
               </div>
             </div>
@@ -154,8 +172,8 @@ export function Chat() {
                       <div
                         className={`max-w-3xl p-6 md:p-8 text-base font-medium relative ${
                           isUser
-                            ? 'bg-bio-deep text-bio-white ml-12'
-                            : 'bg-bio-white dark:bg-bio-deep border border-bio-deep dark:border-bio-white text-bio-deep dark:text-bio-white mr-12'
+                            ? 'bg-bio-deep text-bio-white dark:bg-bio-white dark:text-bio-deep ml-4 sm:ml-12'
+                            : 'bg-bio-white dark:bg-bio-deep/80 border border-bio-deep/10 dark:border-bio-white/10 text-bio-deep dark:text-bio-white mr-4 sm:mr-12'
                         }`}
                       >
                         <div className="absolute -top-3 left-6 px-2 bg-inherit">
@@ -171,12 +189,12 @@ export function Chat() {
                         </ReactMarkdown>
 
                         {!isUser && (
-                          <div className="mt-6 pt-4 border-t-2 border-bio-deep/10 flex flex-wrap gap-2">
+                          <div className="mt-6 pt-4 border-t-2 border-bio-deep/10 dark:border-bio-white/10 flex flex-wrap gap-2">
                             {focusAreas.map((area) => (
                               <button
                                 key={area.id}
                                 onClick={() => handleDeepDive(area)}
-                                className="px-3 py-1 bg-bio-purple/10 hover:bg-bio-purple text-bio-deep text-[10px] font-bold uppercase tracking-widest transition-colors font-mono"
+                                className="px-3 py-1 bg-bio-purple/10 hover:bg-bio-purple text-bio-deep dark:text-bio-white text-[10px] font-bold uppercase tracking-widest transition-colors font-mono"
                               >
                                 {area.label}
                               </button>
@@ -202,7 +220,7 @@ export function Chat() {
             </div>
 
             <div className="bg-bio-white border-t border-bio-deep/10 dark:bg-bio-deep dark:border-bio-white/10">
-              <div className="max-w-5xl mx-auto w-full px-6 md:px-8 py-4">
+              <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 md:px-8 py-4">
                 <div className="mb-4 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
                   {focusAreas.map((area) => (
                     <button
