@@ -155,16 +155,18 @@ export function Chat() {
                         className={`max-w-3xl p-6 md:p-8 text-base font-medium relative ${
                           isUser
                             ? 'bg-bio-deep text-bio-white ml-12'
-                            : 'bg-bio-white border-2 border-bio-deep text-bio-deep mr-12'
+                            : 'bg-bio-white dark:bg-bio-deep border border-bio-deep dark:border-bio-white text-bio-deep dark:text-bio-white mr-12'
                         }`}
                       >
                         <div className="absolute -top-3 left-6 px-2 bg-inherit">
-                          <span className={`text-[10px] font-bold uppercase tracking-widest font-mono ${isUser ? 'text-bio-lime' : 'text-bio-deep'}`}>
+                          <span className={`text-[10px] font-bold uppercase tracking-widest font-mono ${isUser ? 'text-bio-lime' : 'text-bio-deep dark:text-bio-white'}`}>
                             {isUser ? 'USER_INPUT' : 'SYSTEM_RESPONSE'}
+
+
                           </span>
                         </div>
                         
-                        <ReactMarkdown className={`prose max-w-none ${isUser ? 'prose-invert' : 'prose-headings:font-mono prose-headings:uppercase'}`}>
+                        <ReactMarkdown className={`prose max-w-none ${isUser ? 'prose-invert' : 'dark:prose-invert prose-headings:font-mono prose-headings:uppercase'}`}>
                           {message.text}
                         </ReactMarkdown>
 
