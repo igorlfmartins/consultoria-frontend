@@ -40,7 +40,7 @@ export function Sidebar({
       <div className={`bg-bio-white dark:bg-bio-deep relative overflow-hidden group flex flex-col ${isCollapsed ? 'p-4 items-center' : 'p-6 md:p-8'}`}>
         <div className="relative z-10 flex justify-between items-start w-full">
           {!isCollapsed && (
-            <div className="text-[10px] font-bold uppercase tracking-widest text-bio-lime mb-2 font-mono flex flex-col items-start gap-1">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-bio-deep dark:text-bio-lime mb-2 font-mono flex flex-col items-start gap-1">
               <span>Consultoria</span>
               <span>Empresarial</span>
               <span>Multi-Agente</span>
@@ -50,7 +50,7 @@ export function Sidebar({
             <button
               type="button"
               onClick={onCloseMobile}
-              className="md:hidden text-bio-lime hover:text-bio-white transition-colors"
+              className="md:hidden text-bio-deep dark:text-bio-lime hover:text-bio-white transition-colors"
               title="Fechar"
             >
               <PanelLeftClose className="h-6 w-6" />
@@ -58,7 +58,7 @@ export function Sidebar({
             <button 
               type="button"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden md:inline-flex text-bio-lime hover:text-bio-white transition-colors"
+              className="hidden md:inline-flex text-bio-deep dark:text-bio-lime hover:text-bio-white transition-colors"
               title={isCollapsed ? "Expandir" : "Recolher"}
             >
               {isCollapsed ? <PanelLeftOpen className="h-6 w-6" /> : <PanelLeftClose className="h-5 w-5" />}
@@ -69,7 +69,7 @@ export function Sidebar({
         <button
           type="button"
           onClick={onNewSession}
-          className={`mt-8 bg-bio-lime text-bio-deep font-mono font-bold hover:bg-bio-white transition-colors flex items-center justify-center gap-2 uppercase tracking-wide text-sm ${isCollapsed ? 'w-10 h-10 rounded-full p-0' : 'w-full py-4'}`}
+          className={`mt-8 bg-bio-deep dark:bg-bio-lime text-bio-lime dark:text-bio-deep font-mono font-bold hover:bg-bio-white transition-colors flex items-center justify-center gap-2 uppercase tracking-wide text-sm ${isCollapsed ? 'w-10 h-10 rounded-full p-0' : 'w-full py-4'}`}
           title={t('chat.sidebar.newSessionButton')}
         >
           <Plus className="h-4 w-4" />
@@ -84,7 +84,7 @@ export function Sidebar({
               {t('chat.sidebar.history')}
             </span>
           )}
-          {isLoading && <Loader2 className="h-3 w-3 animate-spin text-bio-lime" />}
+          {isLoading && <Loader2 className="h-3 w-3 animate-spin text-bio-deep dark:text-bio-lime" />}
         </div>
 
         <div className="grid grid-cols-1">
@@ -113,8 +113,8 @@ export function Sidebar({
                 {!isCollapsed ? (
                   <>
                     <div className="flex items-start justify-between mb-2">
-                      <span className={`text-[10px] font-bold uppercase tracking-widest font-mono ${isActive ? 'text-bio-deep/70' : 'text-bio-lime'}`}>
-                         {session.createdAt ? new Date(session.createdAt).toLocaleDateString(i18n.language) : 'NO DATE'}
+                      <span className={`text-[10px] font-bold uppercase tracking-widest font-mono ${isActive ? 'text-bio-deep/70' : 'text-bio-deep dark:text-bio-lime'}`}>
+                        {session.createdAt ? new Date(session.createdAt).toLocaleDateString(i18n.language) : 'NO DATE'}
                       </span>
                       {isActive && <div className="w-2 h-2 bg-bio-deep rounded-full animate-pulse" />}
                     </div>
@@ -133,7 +133,7 @@ export function Sidebar({
                     </span>
                   </>
                 ) : (
-                  <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-bio-deep' : 'bg-bio-lime'}`} />
+                  <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-bio-deep' : 'bg-bio-deep dark:bg-bio-lime'}`} />
                 )}
               </button>
             )
@@ -148,13 +148,13 @@ export function Sidebar({
               <span className="text-xs font-bold text-bio-deep dark:text-bio-white tracking-tight font-mono truncate max-w-[150px]" title={userEmail || userId || ''}>
                 {userName || userEmail || userId}
               </span>
-              <span className="text-[10px] text-bio-lime uppercase tracking-widest font-mono">{t('chat.sidebar.userAccessLevel')}</span>
+              <span className="text-[10px] text-bio-deep dark:text-bio-lime uppercase tracking-widest font-mono">{t('chat.sidebar.userAccessLevel')}</span>
             </div>
           )}
           <button
             type="button"
             onClick={onSignOut}
-            className={`text-bio-deep/60 dark:text-bio-white/50 hover:text-bio-lime hover:bg-bio-deep/5 dark:hover:bg-bio-white/5 transition-all ${isCollapsed ? 'p-2' : 'p-3'}`}
+            className={`text-bio-deep/60 dark:text-bio-white/50 hover:text-bio-deep dark:hover:text-bio-lime hover:bg-bio-deep/5 dark:hover:bg-bio-white/5 transition-all ${isCollapsed ? 'p-2' : 'p-3'}`}
             title={t('chat.sidebar.logout')}
           >
             <LogOut className="h-5 w-5" />
