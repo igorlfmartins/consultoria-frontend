@@ -136,7 +136,7 @@ export function Chat() {
               <div className="max-w-5xl mx-auto w-full px-6 md:px-8 space-y-8">
                 {currentSession.messages.length === 0 && !isLoading && (
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-8">
-                    <div className="md:col-span-12 bg-bio-deep p-8 md:p-12 flex flex-col justify-between min-h-[300px] relative overflow-hidden group">
+                    <div className="md:col-span-12 bg-white dark:bg-bio-deep p-8 md:p-12 flex flex-col justify-between min-h-[300px] relative overflow-hidden group">
                       <div>
                         <p className="text-xs font-bold text-bio-lime uppercase tracking-widest mb-4 font-mono">{t('chat.body.initialBriefing.title')}</p>
                         <h2 className="text-3xl md:text-4xl font-bold text-bio-deep dark:text-bio-white font-mono leading-tight">

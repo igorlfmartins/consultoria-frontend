@@ -32,7 +32,8 @@
         "deepDive": "Profundizar:"
       },
       "loading": "Analizando...",
-      "error": "Error en la respuesta."
+      "error": "Error en la respuesta.",
+      "fetchError": "Servidor desconectado. Verifique conexión."
     },
     "footer": {
       "focusGeneral": "General",

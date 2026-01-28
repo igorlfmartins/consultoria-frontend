@@ -32,7 +32,8 @@
         "deepDive": "Aprofundar:"
       },
       "loading": "Analisando...",
-      "error": "Erro na resposta."
+      "error": "Erro na resposta.",
+      "fetchError": "Servidor offline. Verifique a conexão."
     },
     "footer": {
       "focusGeneral": "Geral",

@@ -32,7 +32,8 @@
         "deepDive": "Deep dive:"
       },
       "loading": "Analyzing...",
-      "error": "Response error."
+      "error": "Response error.",
+      "fetchError": "Server offline. Check connection."
     },
     "footer": {
       "focusGeneral": "General",

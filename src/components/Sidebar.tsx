@@ -36,7 +36,7 @@ export function Sidebar({
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
-    <aside className={`fixed md:static inset-y-0 left-0 z-40 flex flex-col border-r-4 border-bio-teal bg-bio-white dark:bg-bio-deep text-bio-deep dark:text-bio-white transition-transform duration-300 ease-in-out ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 w-72 ${isCollapsed ? 'md:w-20' : 'md:w-80'}`}>
+    <aside className={`fixed md:static inset-y-0 left-0 z-40 flex flex-col border-r-4 border-bio-teal bg-bio-white dark:bg-bio-deep text-bio-deep dark:text-bio-white transition-transform duration-300 ease-in-out ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 w-80 ${isCollapsed ? 'md:w-20' : 'md:w-80'}`}>
       <div className={`bg-bio-white dark:bg-bio-deep relative overflow-hidden group flex flex-col ${isCollapsed ? 'p-4 items-center' : 'p-6 md:p-8'}`}>
         <div className="relative z-10 flex justify-between items-start w-full">
           {!isCollapsed && (

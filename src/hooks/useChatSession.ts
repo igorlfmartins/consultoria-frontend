@@ -168,7 +168,11 @@ export function useChatSession({ user, session, language, toneLevel, t }: UseCha
       saveMessagesToStorage(user.id, conversationId, fullMessages);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || t('chat.body.error'));
+      let errorMessage = err.message || t('chat.body.error');
+      if (errorMessage === 'Failed to fetch') {
+        errorMessage = t('chat.body.fetchError');
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
