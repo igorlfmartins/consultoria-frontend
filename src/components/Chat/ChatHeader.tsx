@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { MessageSquareMore, Settings, PanelLeftOpen } from 'lucide-react'
+import { Settings, PanelLeftOpen } from 'lucide-react'
 
 type ChatHeaderProps = {
   onOpenMobileSidebar: () => void
