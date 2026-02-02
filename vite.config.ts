@@ -14,7 +14,7 @@ export default defineConfig({
     }
   },
   preview: {
-    allowedHosts: ['consultoria-de-negocios.up.railway.app'],
+    allowedHosts: ['consultoria-de-negocios.up.railway.app', 'clarity-machine.up.railway.app'],
     headers: {
       // CSP Removed temporarily to debug blocking issues
     }
