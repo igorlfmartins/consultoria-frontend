@@ -134,7 +134,7 @@ export function Sidebar({
         </div>
       </div>
 
-      <div className={`border-t-4 border-bio-teal bg-white dark:bg-bio-deep ${isCollapsed ? 'p-4 flex justify-center' : 'p-6'}`}>
+      <div className={`border-t-4 border-bio-teal bg-bio-deep/5 dark:bg-bio-deep ${isCollapsed ? 'p-4 flex justify-center' : 'p-6'}`}>
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="flex flex-col">
