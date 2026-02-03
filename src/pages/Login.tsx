@@ -107,6 +107,9 @@ export function Login() {
              <p className="font-sans text-xl lg:text-2xl text-bio-deep font-medium max-w-md">
                {t('login.subtitle')}
              </p>
+             <p className="font-mono text-xs text-bio-deep/80 max-w-md leading-relaxed pt-4">
+               {t('login.description')}
+             </p>
            </div>
         </div>
 

@@ -24,9 +24,9 @@
         "title": "Briefing",
         "heading": "¿Cómo puedo ayudar?",
         "steps": {
-          "1": "1. Descarga: coloca aquí el problema y el caos mental.",
-          "2": "2. Diagnostica: la IA corta el ruido y muestra lo que cuesta caro.",
-          "3": "3. Enfoca: sal con un plan corto y los próximos pasos."
+          "1": "1. Descarga: Registre aquí el problema y proporcione la información relevante.",
+          "2": "2. Diagnóstico: La IA elimina el ruido e identifica los puntos que generan mayor impacto y costo.",
+          "3": "3. Dirija: Reciba un plan objetivo con prioridades claras y próximos pasos definidos."
         },
         "paragraph": "Describa su desafío, objetivo o contexto actual.",
         "example1": "Análisis SaaS B2B",
@@ -70,8 +70,9 @@
     "appTitle": "Plataforma de Consultoría de IA",
     "heroTitle": "Máquina de Claridad",
     "title": "Portal de Consultoría Estratégica",
-    "subtitle": "La soledad del liderazgo cuesta caro. Valide cada decisión crítica al instante con su Junta Estratégica de IA.",
-      "emailLabel": "Correo electrónico",
+    "subtitle": "La soledad del liderazgo es costosa. Valide cada decisión crítica instantáneamente con su Consejo Estratégico de IA.",
+    "description": "La Máquina de Claridad es un consejo asesor de IA siempre disponible, diseñado para acabar con la soledad del líder y acelerar decisiones. Los ejecutivos validan estrategias, diagnostican cuellos de botella y reciben planes directos, sin el costo, ruido y lentitud de las soluciones tradicionales. Con expertos virtuales (Ventas, Marketing, Finanzas, etc.) y niveles de franqueza ajustables, la plataforma transforma la confusión mental en una hoja de ruta clara y práctica.",
+    "emailLabel": "Correo electrónico",
       "emailPlaceholder": "tu@email.com",
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "••••••••",

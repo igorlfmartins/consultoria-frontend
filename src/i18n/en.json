@@ -24,9 +24,9 @@
         "title": "Briefing",
         "heading": "How can I help?",
         "steps": {
-          "1": "1. Unload: drop the problem and mental chaos here.",
-          "2": "2. Diagnose: AI cuts the noise and shows what’s costing you.",
-          "3": "3. Direct: leave with a lean plan and next steps."
+          "1": "1. Unload: Register the problem here and provide relevant information.",
+          "2": "2. Diagnose: AI eliminates the noise and identifies the points that generate the greatest impact and cost.",
+          "3": "3. Direct: Receive an objective plan with clear priorities and defined next steps."
         },
         "paragraph": "Describe your challenge, goal, or current context.",
         "example1": "SaaS B2B Analysis",
@@ -71,7 +71,8 @@
     "heroTitle": "Clarity Machine",
     "title": "Strategic Consulting Portal",
     "subtitle": "Leadership loneliness is expensive. Validate every critical decision instantly with your AI Strategic Board.",
-      "emailLabel": "Email",
+    "description": "Clarity Machine is an always-on AI advisory board designed to end leadership loneliness and accelerate decisions. Executives validate strategies, diagnose bottlenecks, and receive direct plans without the cost, noise, and slowness of traditional solutions. With virtual experts (Sales, Marketing, Finance, etc.) and adjustable candor levels, the platform transforms mental clutter into a clear, practical roadmap.",
+    "emailLabel": "Email",
       "emailPlaceholder": "you@email.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",

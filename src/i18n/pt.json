@@ -24,9 +24,9 @@
         "title": "Briefing",
         "heading": "Como posso ajudar hoje?",
         "steps": {
-          "1": "1. Descarregue: coloque o problema e a bagunça mental aqui.",
-          "2": "2. Diagnose: a IA corta o ruído e revela o que está custando caro.",
-          "3": "3. Direcione: saia com o plano enxuto e os próximos passos."
+          "1": "1. Descarregue: registre aqui o problema e dê as informações relevantes.",
+          "2": "2. Diagnose: a IA elimina o ruído e identifica os pontos que geram maior impacto e custo.",
+          "3": "3. Direcione: receba um plano objetivo com prioridades claras e próximos passos definidos."
         },
         "paragraph": "Descreva seu desafio, objetivo ou contexto atual.",
         "example1": "Análise de SaaS B2B",
@@ -70,7 +70,8 @@
     "appTitle": "Plataforma de Consultoria em IA",
     "heroTitle": "Máquina de Clareza",
     "title": "Portal de Consultoria Estratégica",
-    "subtitle": "A solidão da liderança custa caro. Valide cada decisão crítica instantaneamente com seu Board Estratégico de IA.",
+    "subtitle": "A solidão da liderança custa caro. Valide cada decisão crítica instantaneamente com seu Conselho Estratégico de IA.",
+    "description": "A Máquina de Clareza é um conselho consultivo de IA sempre disponível, criado para acabar com a solidão do líder e acelerar decisões. Executivos validam estratégias, diagnosticam gargalos e recebem planos diretos, sem o custo, ruído e lentidão das soluções tradicionais. Com especialistas virtuais (Vendas, Marketing, Finanças, etc.) e níveis de franqueza ajustáveis, a plataforma transforma a confusão mental em um roteiro claro e prático.",
     "emailLabel": "E-mail",
     "emailPlaceholder": "seu@email.com",
     "passwordLabel": "Senha",
