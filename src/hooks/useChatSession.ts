@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { ChatMessage, SessionSummary } from '../api';
-import { sendConsultoriaMessage } from '../api';
 import { 
-  loadSessionsFromStorage, 
-  saveSessionsToStorage, 
-  loadMessagesFromStorage, 
-  saveMessagesToStorage,
-  getMessagesKey
-} from '../utils/storage';
+  sendConsultoriaMessage, 
+  fetchSessions, 
+  fetchMessages, 
+  deleteSession 
+} from '../api';
 
 interface User {
   id: string;
@@ -40,12 +38,22 @@ export function useChatSession({ user, session, language, toneLevel, t }: UseCha
 
   // Load sessions on user change
   useEffect(() => {
-    if (!user) return;
-    setIsLoadingSessions(true);
-    const stored = loadSessionsFromStorage(user.id);
-    setSessions(stored);
-    setIsLoadingSessions(false);
-  }, [user]);
+    if (!user || !session?.access_token) return;
+    
+    const loadSessions = async () => {
+      setIsLoadingSessions(true);
+      try {
+        const data = await fetchSessions(session.access_token);
+        setSessions(data);
+      } catch (err) {
+        console.error('Failed to load sessions', err);
+      } finally {
+        setIsLoadingSessions(false);
+      }
+    };
+
+    loadSessions();
+  }, [user, session?.access_token]);
 
   const handleNewSession = useCallback(() => {
     setCurrentSession({
@@ -56,47 +64,57 @@ export function useChatSession({ user, session, language, toneLevel, t }: UseCha
     setError(null);
   }, [t]);
 
-  const handleSelectSession = useCallback((session: SessionSummary) => {
-    if (!user) return;
-    const messages = loadMessagesFromStorage(user.id, session.id);
-    setCurrentSession({
-      id: session.id,
-      title: session.title,
-      messages,
-    });
-    setError(null);
-  }, [user]);
+  const handleSelectSession = useCallback(async (selectedSession: SessionSummary) => {
+    if (!user || !session?.access_token) return;
+    
+    setIsLoading(true); // Reuse isLoading or add specific one
+    try {
+      const messages = await fetchMessages(session.access_token, selectedSession.id);
+      setCurrentSession({
+        id: selectedSession.id,
+        title: selectedSession.title,
+        messages,
+      });
+      setError(null);
+    } catch (err) {
+      console.error('Failed to load messages', err);
+      setError('Erro ao carregar mensagens.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user, session?.access_token]);
 
-  const handleDeleteSession = useCallback((sessionId: string, event: React.MouseEvent) => {
+  const handleDeleteSession = useCallback(async (sessionId: string, event: React.MouseEvent) => {
     event.stopPropagation();
-    if (!user) return;
+    if (!user || !session?.access_token) return;
 
     if (!window.confirm(t('chat.sidebar.confirmDelete'))) return;
 
-    const nextSessions = sessions.filter((s) => s.id !== sessionId);
-    setSessions(nextSessions);
-    saveSessionsToStorage(user.id, nextSessions);
-    
     try {
-      window.localStorage.removeItem(getMessagesKey(user.id, sessionId));
-    } catch {}
-
-    if (currentSession.id === sessionId) {
-      handleNewSession();
+      const success = await deleteSession(session.access_token, sessionId);
+      if (success) {
+        setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+        if (currentSession.id === sessionId) {
+          handleNewSession();
+        }
+      }
+    } catch (err) {
+      console.error('Failed to delete session', err);
     }
-  }, [user, sessions, currentSession.id, handleNewSession, t]);
+  }, [user, session?.access_token, currentSession.id, handleNewSession, t]);
 
   const sendMessage = useCallback(async (text: string, focusToSend?: string | null) => {
     if (!user || !text.trim()) return;
 
     const now = new Date().toISOString();
     const userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID(), // Temporary ID
       sender: 'user',
       text,
       createdAt: now,
     };
 
+    // Optimistic update
     setCurrentSession((prev) => ({
       ...prev,
       messages: [...prev.messages, userMessage],
@@ -125,47 +143,41 @@ export function useChatSession({ user, session, language, toneLevel, t }: UseCha
       };
 
       const conversationId = result.conversationId;
-      const baseMessages = [...currentSession.messages, userMessage];
-      const fullMessages = [...baseMessages, aiMessage];
-
-      setCurrentSession((prev) => ({
-        ...prev,
-        id: conversationId,
-        messages: fullMessages,
-      }));
-
-      // Update session list and storage
-      let createdAt = now;
-      let title = currentSession.title;
-      const existing = sessions.find((s) => s.id === conversationId);
       
-      if (existing) {
-        createdAt = existing.createdAt ?? createdAt;
-        title = existing.title || title;
-      } else if (!title || title === t('chat.session.new')) {
-        title = text.length > 60 ? `${text.slice(0, 57)}...` : text;
-      }
-
-      const summary: SessionSummary = {
-        id: conversationId,
-        title: title || t('chat.session.defaultTitle'),
-        createdAt,
-      };
-
-      setSessions((prev) => {
-        const index = prev.findIndex((s) => s.id === conversationId);
-        let next;
-        if (index === -1) {
-          next = [summary, ...prev];
-        } else {
-          next = [...prev];
-          next[index] = summary;
+      setCurrentSession((prev) => {
+        // If it was a new session, update ID
+        if (prev.id !== conversationId) {
+          return {
+            ...prev,
+            id: conversationId,
+            messages: [...prev.messages, aiMessage]
+          };
         }
-        saveSessionsToStorage(user.id, next);
-        return next;
+        return {
+          ...prev,
+          messages: [...prev.messages, aiMessage]
+        };
       });
 
-      saveMessagesToStorage(user.id, conversationId, fullMessages);
+      // Update session list if it was a new session
+      if (!currentSession.id) {
+        const title = text.length > 60 ? `${text.slice(0, 57)}...` : text;
+        const newSummary: SessionSummary = {
+          id: conversationId,
+          title: title, // Backend generates title too, but we can approximate here or refetch
+          createdAt: now,
+        };
+        
+        // Optionally fetch sessions to get the exact title generated by backend
+        // For now, let's just prepend to list locally
+        setSessions((prev) => [newSummary, ...prev]);
+        
+        // Re-fetch sessions to ensure consistency (e.g. backend title generation)
+        if (session?.access_token) {
+           fetchSessions(session.access_token).then(setSessions);
+        }
+      }
+
     } catch (err: any) {
       console.error(err);
       let errorMessage = err.message || t('chat.body.error');
@@ -176,7 +188,7 @@ export function useChatSession({ user, session, language, toneLevel, t }: UseCha
     } finally {
       setIsLoading(false);
     }
-  }, [user, session, currentSession, sessions, language, toneLevel, t]);
+  }, [user, session, currentSession, language, toneLevel, t]);
 
   return {
     sessions,
