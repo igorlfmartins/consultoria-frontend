@@ -63,15 +63,7 @@ export function ChatInput({ input, setInput, onSubmit, onToggleLive, isLoading }
             <span className="ml-2 uppercase tracking-wide">{t('chat.footer.send')}</span>
           </button>
 
-          {/* <button
-            type="button"
-            onClick={onToggleLive}
-            className="h-full px-4 bg-white border-2 border-bio-deep/10 text-bio-deep dark:bg-bio-white/5 dark:border-bio-white/20 dark:text-bio-white hover:border-bio-lime hover:bg-bio-lime/10 dark:hover:bg-bio-white/10 transition-all relative group flex items-center justify-center"
-            title="Live Mode"
-          >
-            <div className="absolute top-0 right-0 w-2 h-2 bg-bio-lime animate-pulse" />
-            <Mic className="h-4 w-4" />
-          </button> */}
+          {/* Live Mode button removed temporarily */}
         </div>
       </div>
       <div className="flex items-center gap-4">
