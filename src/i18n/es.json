@@ -49,7 +49,7 @@
       "generateReport": "Informe",
       "generateReportTooltip": "Generar Informe Completo",
       "inputPlaceholder": "Describa su desafío...",
-      "textareaPlaceholder": "Escriba su mensaje...",
+      "textareaPlaceholder": "Preguntas más sinceras generan respuestas más transformadoras...",
       "send": "Enviar",
       "disclaimer": "La IA puede cometer errores. Verifique info crítica.",
       "integratedView": "Visión General"
@@ -108,7 +108,7 @@
     "tone": {
       "label": "Tono de la IA",
       "level1": {
-        "label": "Coach",
+        "label": "Coach Empático",
         "desc": "Respuestas empáticas y motivadoras."
       },
       "level2": {

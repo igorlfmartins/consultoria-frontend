@@ -49,7 +49,7 @@
       "generateReport": "Relatório",
       "generateReportTooltip": "Gerar Relatório Completo",
       "inputPlaceholder": "Descreva seu desafio...",
-      "textareaPlaceholder": "Digite sua mensagem...",
+      "textareaPlaceholder": "Perguntas mais sinceras geram respostas mais transformadoras...",
       "send": "Enviar",
       "disclaimer": "IA pode cometer erros. Verifique informações críticas.",
       "integratedView": "Visão Geral"
@@ -108,7 +108,7 @@
     "tone": {
       "label": "Tom da IA",
       "level1": {
-        "label": "Coach",
+        "label": "Coach Empático",
         "desc": "Respostas empáticas e motivacionais."
       },
       "level2": {

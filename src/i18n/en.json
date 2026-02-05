@@ -49,7 +49,7 @@
       "generateReport": "Report",
       "generateReportTooltip": "Generate Full Report",
       "inputPlaceholder": "Describe your challenge...",
-      "textareaPlaceholder": "Type your message...",
+      "textareaPlaceholder": "More sincere questions generate more transformative answers...",
       "send": "Send",
       "disclaimer": "AI can make mistakes. Verify critical info.",
       "integratedView": "Overview"
@@ -108,7 +108,7 @@
     "tone": {
       "label": "AI Tone",
       "level1": {
-        "label": "Coach",
+        "label": "Empathetic Coach",
         "desc": "Empathetic and motivational responses."
       },
       "level2": {
