@@ -103,10 +103,18 @@ export function useChatSession({ user, session, language, toneLevel, t }: UseCha
     }
   }, [user, session?.access_token, currentSession.id, handleNewSession, t]);
 
-  const sendMessage = useCallback(async (text: string, focusToSend?: string | null, file?: File | null) => {
-    if (!user || (!text.trim() && !file)) return;
-    const finalText = text.trim().length > 0 ? text : `Arquivo anexado: ${file?.name ?? 'arquivo'}`;
-    const displayText = file ? `[Arquivo: ${file.name}] ${finalText}` : finalText;
+  const sendMessage = useCallback(async (text: string, focusToSend?: string | null, files?: File[] | null) => {
+    if (!user || (!text.trim() && (!files || files.length === 0))) return;
+    
+    let finalText = text.trim();
+    if (files && files.length > 0) {
+      const fileNames = files.map(f => f.name).join(', ');
+      finalText = finalText.length > 0 ? finalText : `Arquivos anexados: ${fileNames}`;
+    }
+    
+    const displayText = files && files.length > 0 
+      ? `[Arquivos: ${files.length}] ${finalText}` 
+      : finalText;
 
     const now = new Date().toISOString();
     const userMessage: ChatMessage = {
@@ -135,7 +143,7 @@ export function useChatSession({ user, session, language, toneLevel, t }: UseCha
         language: language,
         toneLevel: toneLevel,
         token: session?.access_token,
-        file: file,
+        files: files,
       });
 
       const aiMessage: ChatMessage = {

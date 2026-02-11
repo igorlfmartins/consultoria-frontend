@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 interface ChatInputProps {
   input: string
   setInput: (value: string) => void
-  onSubmit: (e: FormEvent, file?: File | null) => void
+  onSubmit: (e: FormEvent, files?: File[] | null) => void
   isLoading: boolean
 }
 
@@ -13,9 +13,9 @@ export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputPro
   const { t } = useTranslation()
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
 
-  const canSend = (input.trim().length > 0 || selectedFile !== null) && !isLoading
+  const canSend = (input.trim().length > 0 || selectedFiles.length > 0) && !isLoading
 
   useEffect(() => {
     const el = inputRef.current
@@ -37,42 +37,45 @@ export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputPro
 
   function handleFileSelect(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0])
+      const newFiles = Array.from(event.target.files)
+      setSelectedFiles(prev => [...prev, ...newFiles])
     }
-  }
-
-  function handleRemoveFile() {
-    setSelectedFile(null)
+    // Reset input to allow selecting the same file again if needed
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
+  }
+
+  function handleRemoveFile(index: number) {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index))
   }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if (!canSend) return
-    onSubmit(e, selectedFile)
-    setSelectedFile(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
+    onSubmit(e, selectedFiles)
+    setSelectedFiles([])
   }
 
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-4">
-      {selectedFile && (
-        <div className="flex items-center gap-2 bg-bio-deep/5 dark:bg-bio-white/10 p-2 border-l-2 border-bio-teal dark:border-bio-lime">
-          <Paperclip className="h-4 w-4 text-bio-deep/60 dark:text-bio-white/60" />
-          <span className="text-xs font-mono text-bio-deep dark:text-bio-white truncate max-w-[200px]">
-            {selectedFile.name}
-          </span>
-          <button
-            type="button"
-            onClick={handleRemoveFile}
-            className="ml-auto text-bio-deep/40 hover:text-red-500 dark:text-bio-white/40 dark:hover:text-red-400"
-          >
-            <X className="h-4 w-4" />
-          </button>
+      {selectedFiles.length > 0 && (
+        <div className="flex flex-wrap gap-2 bg-bio-deep/5 dark:bg-bio-white/10 p-2 border-l-2 border-bio-teal dark:border-bio-lime">
+          {selectedFiles.map((file, index) => (
+            <div key={`${file.name}-${index}`} className="flex items-center gap-2 bg-bio-deep/10 dark:bg-bio-white/20 px-2 py-1 rounded">
+              <Paperclip className="h-3 w-3 text-bio-deep/60 dark:text-bio-white/60" />
+              <span className="text-xs font-mono text-bio-deep dark:text-bio-white truncate max-w-[150px]">
+                {file.name}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleRemoveFile(index)}
+                className="text-bio-deep/40 hover:text-red-500 dark:text-bio-white/40 dark:hover:text-red-400"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          ))}
         </div>
       )}
       <div className="flex flex-col md:flex-row items-stretch gap-4">
@@ -81,10 +84,11 @@ export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputPro
           
           <input
             type="file"
+            multiple
             ref={fileInputRef}
             onChange={handleFileSelect}
             className="hidden"
-            accept=".txt,.md,.csv,.json"
+            accept=".txt,.md,.csv,.json,.pdf,.docx"
           />
 
           <textarea
