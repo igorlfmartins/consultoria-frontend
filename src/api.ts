@@ -1,4 +1,6 @@
-const RAW_API_URL = import.meta.env.VITE_API_URL
+import { frontendEnv } from './config/env.js'
+
+const RAW_API_URL = frontendEnv.VITE_API_URL
 const API_BASE_URL = (() => {
   if (!RAW_API_URL) return 'http://localhost:3000/api'
   const trimmed = RAW_API_URL.trim()
@@ -14,7 +16,6 @@ const API_BASE_URL = (() => {
 })()
 
 const CONSULTORIA_URL = `${API_BASE_URL}/consultoria`
-const CLIENT_API_KEY = import.meta.env.VITE_CLIENT_API_KEY || ''
 
 const extractErrorMessage = (value: unknown): string | null => {
   if (!value) return null
@@ -72,9 +73,7 @@ export async function sendConsultoriaMessage(params: {
     parts: [{ text: msg.text }]
   }));
 
-  const headers: HeadersInit = {
-    'x-api-key': CLIENT_API_KEY,
-  };
+  const headers: HeadersInit = {};
 
   if (params.token) {
     headers['Authorization'] = `Bearer ${params.token}`;
